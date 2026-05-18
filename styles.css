@@ -1,7 +1,7 @@
 :root {
-    --primary: #00ff88;
-    --primary-dark: #00cc6a;
-    --secondary: #ff0066;
+    --primary: #309eff;
+    --primary-dark: #2454ae;
+    --secondary: #ffb300;
     --dark: #0a0e1a;
     --dark-lighter: #141927;
     --dark-card: #1a2035;
@@ -70,11 +70,12 @@ body {
 
 .logo-vee {
     color: var(--primary);
-    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    text-shadow: 0 0 20px rgba(255, 57, 57, 0.5);
 }
 
 .logo-tee {
-    color: var(--text);
+    color: var(--primary);
+    text-shadow: 0 0 20px rgba(255, 57, 57, 0.5);
 }
 
 .logo-subtitle {
