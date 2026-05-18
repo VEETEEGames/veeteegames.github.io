@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Press Kit - VEETEE Games</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        .press-header {
+            padding: 12rem 0 6rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-lighter) 100%);
+        }
+
+        .press-header h1 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .press-header p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+        }
+
+        .press-section {
+            padding: 4rem 0 6rem;
+        }
+
+        .press-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .press-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.15);
+        }
+
+        .press-content {
+            display: grid;
+            grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.2fr);
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .press-image {
+            aspect-ratio: 16/9;
+            min-height: 220px;
+            background: linear-gradient(135deg, var(--dark-lighter), var(--dark-card));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .press-info {
+            padding: 3rem 3rem 3rem 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .press-title {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .press-description {
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .press-features {
+            list-style: none;
+            margin-bottom: 2.5rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .press-features li {
+            color: var(--text-dim);
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .press-features li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+
+            width: 100%;
+            padding: 1.4rem 2rem;
+
+            background: var(--primary);
+            color: var(--dark);
+
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+
+            border-radius: 8px;
+
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(0, 255, 136, 0.5);
+        }
+
+        @media (max-width: 968px) {
+            .press-content {
+                grid-template-columns: 1fr;
+            }
+
+            .press-info {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                <span class="logo-subtitle">GAMES</span>
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="games.html" class="nav-link">Games</a></li>
+                <li><a href="news.html" class="nav-link">News</a></li>
+                <li><a href="press.html" class="nav-link active">Press Kit</a></li>
+                <li><a href="privacy.html" class="nav-link">Privacy</a></li>
+            </ul>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+<section class="press-header">
+    <div class="container">
+        <h1>Press Kit</h1>
+        <p>Download official VEETEE Games branding, screenshots, logos, and media assets</p>
+    </div>
+</section>
+
+<section class="press-section">
+    <div class="container">
+
+        <div class="press-card" data-animate>
+
+            <div class="press-info">
+
+                <h2 class="press-title">
+                    VEETEE Games Media Package
+                </h2>
+
+                <p class="press-description">
+                    Access our official press materials including studio logos, game screenshots,
+                    promotional artwork, branding assets, social media graphics, and additional
+                    media resources for content creators, journalists, and partners.
+                </p>
+
+                <ul class="press-features">
+                    <li>High resolution logos</li>
+                    <li>Official screenshots</li>
+                    <li>Transparent PNG assets</li>
+                    <li>Branding guidelines</li>
+                    <li>Promotional artwork</li>
+                    <li>Studio information</li>
+                </ul>
+
+                <!-- BUTTONS -->
+                <div class="press-buttons">
+
+                    <a href="downloads/VEETEE_Press_Kit.zip" download class="download-btn secondary">
+                        📦 Download Studio Press Kit
+                    </a>
+
+                    <a href="downloads/Project_Jazzgame_Press_Kit.zip" download class="download-btn secondary">
+                        🏃🏼 Download Project Jazzgame Kit
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+    <footer class="footer">
+        <div class="container">
+
+            <div class="footer-content">
+
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                        <span class="logo-subtitle">GAMES</span>
+                    </div>
+
+                    <p>Crafting unforgettable gaming experiences</p>
+                </div>
+
+                <div class="footer-links">
+
+                    <div class="footer-column">
+                        <h4>Navigate</h4>
+
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="games.html">Games</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="press.html">Press Kit</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+
+                        <ul>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                            <li><a href="privacy.html#terms">Terms of Service</a></li>
+                            <li><a href="press.html">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+
+                        <ul>
+                            <li><a href="https://www.youtube.com/@VEETEEGames" target="_blank">YouTube</a></li>
+                            <li><a href="https://x.com/VEETEEGames" target="_blank">Twitter</a></li>
+                            <li><a href="https://discord.gg/vRTEazs3x5" target="_blank">Discord</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 VEETEE Games. All rights reserved.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -70,12 +70,12 @@ body {
 
 .logo-vee {
     color: var(--primary);
-    text-shadow: 0 0 20px rgba(255, 57, 57, 0.5);
+    text-shadow: 0 0 20px rgba(0, 255, 234, 0.5);
 }
 
 .logo-tee {
     color: var(--primary);
-    text-shadow: 0 0 20px rgba(255, 57, 57, 0.5);
+    text-shadow: 0 0 20px rgba(0, 255, 234, 0.5);
 }
 
 .logo-subtitle {
@@ -251,12 +251,12 @@ body {
 .btn-primary {
     background: var(--primary);
     color: var(--dark);
-    box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    box-shadow: 0 0 30px rgba(8, 0, 255, 0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 40px rgba(0, 157, 255, 0.5);
 }
 
 .btn-secondary {
@@ -378,7 +378,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 255, 136, 0.9);
+    background: rgba(0, 132, 255, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -440,8 +440,8 @@ body {
 
 .status-released {
     background: rgba(0, 255, 136, 0.2);
-    color: var(--primary);
-    border: 1px solid var(--primary);
+    color: rgb(0, 255, 136);
+    border: 1px solid rgb(0, 255, 136);
 }
 
 .status-development {
@@ -782,4 +782,75 @@ body {
         width: 100%;
         justify-content: center;
     }
+}
+.press-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.download-btn.secondary {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+.press-section .container {
+    display: flex;
+    justify-content: center;
+}
+.news-article {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.press-card {
+    width: 100%;
+    max-width: 800px;
+}
+.press-section .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.download-btn.secondary:hover {
+    background: var(--primary);
+    color: var(--dark);
+}
+.press-info {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.news-thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.video-placeholder {
+    aspect-ratio: 16/9;
+    background-color: var(--dark-lighter);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.game-detail-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    align-items: stretch;
+    grid-template-columns: 0.8fr 1.5fr;
+    /* IMPORTANT */
+}
+.game-detail-image {
+    aspect-ratio: 3 / 4;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    /* PORTRAIT */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    overflow: hidden;
 }

@@ -261,145 +261,85 @@
         </div>
     </section>
 
-    <section class="games-section">
-        <div class="container">
-            
-            <!-- Game 1 -->
-            <div class="game-detail" data-animate>
-                <div class="game-detail-content">
-                    <div class="game-detail-image">
-                        Game Screenshot/Cover
-                    </div>
-                    <div class="game-detail-info">
-                        <h2 class="game-detail-title">Epic Adventure Quest</h2>
-                        <div class="game-detail-meta">
-                            <div class="meta-item">
-                                <span class="meta-label">Platform:</span>
-                                <span>PC, Mobile</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="meta-label">Genre:</span>
-                                <span>Action RPG</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="meta-label">Status:</span>
-                                <span class="game-status status-released">Available Now</span>
-                            </div>
-                        </div>
-                        <p class="game-detail-description">
-                            Embark on an epic journey through mystical lands filled with danger, treasure, and unforgettable characters. Battle fierce enemies, solve ancient puzzles, and uncover the secrets of a forgotten civilization in this action-packed RPG adventure.
-                        </p>
-                        <div class="game-features">
-                            <h3>Key Features</h3>
-                            <ul class="features-list">
-                                <li>Stunning visual effects</li>
-                                <li>Deep character customization</li>
-                                <li>Epic boss battles</li>
-                                <li>Rich storyline</li>
-                                <li>Multiplayer co-op mode</li>
-                                <li>Regular content updates</li>
-                            </ul>
-                        </div>
-                        <div class="game-actions">
-                            <a href="https://play.google.com/store" target="_blank" class="action-btn btn-playstore">📱 Google Play</a>
-                            <a href="https://apps.apple.com" target="_blank" class="action-btn btn-appstore">🍎 App Store</a>
-                            <a href="https://store.steampowered.com" target="_blank" class="action-btn btn-steam">🎮 Steam</a>
-                        </div>
-                    </div>
-                </div>
+<section class="games-section">
+    <div class="container">
+        <div id="gamesGrid"></div>
+    </div>
+</section>
+
+<script src="games-data.js"></script>
+
+<script>
+    function renderGames()
+    {
+        const grid = document.getElementById("gamesGrid");
+
+        const sorted = GAMES_DATA;
+
+        sorted.forEach(game =>
+        {
+            const article = document.createElement("div");
+            article.className = "game-detail";
+
+            article.innerHTML = `
+        <div class="game-detail-content">
+
+            <div class="game-detail-image"
+                style="background-image:url('${game.image}')">
             </div>
 
-            <!-- Game 2 -->
-            <div class="game-detail" data-animate>
-                <div class="game-detail-content">
-                    <div class="game-detail-image">
-                        Game Screenshot/Cover
-                    </div>
-                    <div class="game-detail-info">
-                        <h2 class="game-detail-title">Neon Racer 2077</h2>
-                        <div class="game-detail-meta">
-                            <div class="meta-item">
-                                <span class="meta-label">Platform:</span>
-                                <span>PC, Console</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="meta-label">Genre:</span>
-                                <span>Racing</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="meta-label">Status:</span>
-                                <span class="game-status status-upcoming">Coming Soon</span>
-                            </div>
-                        </div>
-                        <p class="game-detail-description">
-                            Experience the future of racing in this high-octane cyberpunk racer. Customize your vehicle with cutting-edge technology, compete in underground circuits, and dominate the neon-lit streets of a dystopian megacity.
-                        </p>
-                        <div class="game-features">
-                            <h3>Key Features</h3>
-                            <ul class="features-list">
-                                <li>Futuristic vehicle customization</li>
-                                <li>Dynamic weather system</li>
-                                <li>Online multiplayer races</li>
-                                <li>Story-driven campaign</li>
-                                <li>Stunning cyberpunk visuals</li>
-                                <li>60+ unique tracks</li>
-                            </ul>
-                        </div>
-                        <div class="game-actions">
-                            <a href="https://store.steampowered.com" target="_blank" class="action-btn btn-wishlist">⭐ Add to Wishlist</a>
-                            <a href="https://www.youtube.com/@your-channel" target="_blank" class="action-btn btn-steam">📺 Watch Trailer</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="game-detail-info">
 
-            <!-- Game 3 -->
-            <div class="game-detail" data-animate>
-                <div class="game-detail-content">
-                    <div class="game-detail-image">
-                        Game Screenshot/Cover
+                <h2 class="game-detail-title">${game.title}</h2>
+
+                <div class="game-detail-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Platform:</span>
+                        <span>${game.platform}</span>
                     </div>
-                    <div class="game-detail-info">
-                        <h2 class="game-detail-title">Puzzle Masters</h2>
-                        <div class="game-detail-meta">
-                            <div class="meta-item">
-                                <span class="meta-label">Platform:</span>
-                                <span>Mobile</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="meta-label">Genre:</span>
-                                <span>Puzzle</span>
-                            </div>
-                            <div class="meta-item">
-                                <span class="meta-label">Status:</span>
-                                <span class="game-status status-development">In Development</span>
-                            </div>
-                        </div>
-                        <p class="game-detail-description">
-                            Challenge your mind with hundreds of clever puzzles that blend logic, strategy, and creativity. Perfect for quick gaming sessions or extended puzzle-solving marathons. Can you master them all?
-                        </p>
-                        <div class="game-features">
-                            <h3>Key Features</h3>
-                            <ul class="features-list">
-                                <li>500+ unique puzzles</li>
-                                <li>Daily challenges</li>
-                                <li>Hint system</li>
-                                <li>Leaderboards</li>
-                                <li>Minimalist design</li>
-                                <li>Offline play</li>
-                            </ul>
-                        </div>
-                        <div class="game-actions">
-                            <a href="#newsletter" class="action-btn btn-wishlist">🔔 Get Notified</a>
-                            <a href="news.html" class="action-btn btn-steam">📰 Dev Updates</a>
-                        </div>
+
+                    <div class="meta-item">
+                        <span class="meta-label">Genre:</span>
+                        <span>${game.genre}</span>
+                    </div>
+
+                    <div class="meta-item">
+                        <span class="meta-label">Status:</span>
+                        <span class="game-status ${getStatusClass(game.status)}">
+                            ${game.status}
+                        </span>
                     </div>
                 </div>
+
+                <p class="game-detail-description">
+                    ${game.description}
+                </p>
+
+                <div class="game-features">
+                    <h3>Key Features</h3>
+                    <ul class="features-list">
+                        ${game.features.map(f => `<li>${f}</li>`).join("")}
+                    </ul>
+                </div>
+
+                <div class="game-actions">
+                    ${game.links.map(l => `
+                        <a href="${l.url}" target="_blank" class="action-btn ${l.class}">
+                            ${l.label}
+                        </a>
+                    `).join("")}
+                </div>
+
             </div>
 
         </div>
-    </section>
+        `;
+            grid.appendChild(article);
+        });
+    }
 
+    renderGames();
+</script>
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -431,9 +371,9 @@
                     <div class="footer-column">
                         <h4>Connect</h4>
                         <ul>
-                            <li><a href="https://youtube.com/@your-channel" target="_blank">YouTube</a></li>
-                            <li><a href="https://twitter.com/your-handle" target="_blank">Twitter</a></li>
-                            <li><a href="https://discord.gg/your-server" target="_blank">Discord</a></li>
+                            <li><a href="https://www.youtube.com/@VEETEEGames" target="_blank">YouTube</a></li>
+                            <li><a href="https://x.com/VEETEEGames" target="_blank">Twitter</a></li>
+                            <li><a href="https://discord.gg/vRTEazs3x5" target="_blank">Discord</a></li>
                         </ul>
                     </div>
                 </div>
