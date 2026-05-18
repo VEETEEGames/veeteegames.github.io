@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - VEETEE Games</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .news-header {
+            padding: 12rem 0 6rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-lighter) 100%);
+        }
+
+        .news-header h1 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .news-header p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+        }
+
+        .news-section {
+            padding: 4rem 0;
+        }
+
+        .news-grid {
+            display: grid;
+            gap: 3rem;
+        }
+
+        .news-article {
+            background: var(--dark-card);
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .news-article:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .news-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .news-thumbnail {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, var(--dark-lighter), var(--dark-card));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-family: 'Oxanium', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-thumbnail::after {
+            content: '▶';
+            position: absolute;
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .news-article:hover .news-thumbnail::after {
+            opacity: 1;
+        }
+
+        .news-info {
+            padding: 2rem 2rem 2rem 0;
+        }
+
+        .news-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .news-date {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .news-category {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .news-title {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .news-excerpt {
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .news-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-family: 'Oxanium', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .news-link:hover {
+            gap: 1rem;
+        }
+
+        .featured-article {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.05));
+            border-color: var(--primary);
+        }
+
+        .featured-badge {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            font-family: 'Oxanium', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .devlog-embed {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--dark-card);
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+        }
+
+        .devlog-embed h3 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-item {
+            background: var(--dark-lighter);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .video-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-placeholder {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, var(--dark), var(--dark-lighter));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-size: 3rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .video-placeholder::after {
+            content: '▶';
+            color: var(--primary);
+        }
+
+        .video-title {
+            padding: 1rem;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            .news-content {
+                grid-template-columns: 1fr;
+            }
+
+            .news-info {
+                padding: 2rem;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                <span class="logo-subtitle">GAMES</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="games.html" class="nav-link">Games</a></li>
+                <li><a href="news.html" class="nav-link active">News</a></li>
+                <li><a href="press.html" class="nav-link">Press Kit</a></li>
+                <li><a href="privacy.html" class="nav-link">Privacy</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="news-header">
+        <div class="container">
+            <h1>Latest News</h1>
+            <p>Stay up to date with our latest developments, announcements, and devlogs</p>
+        </div>
+    </section>
+
+    <section class="news-section">
+        <div class="container">
+            <div class="news-grid">
+
+                <!-- Featured Article -->
+                <article class="news-article featured-article" data-animate>
+                    <div class="news-content">
+                        <div class="news-thumbnail">
+                            Thumbnail
+                        </div>
+                        <div class="news-info">
+                            <span class="featured-badge">⭐ Featured</span>
+                            <div class="news-meta">
+                                <span class="news-date">January 15, 2024</span>
+                                <span class="news-category">Major Update</span>
+                            </div>
+                            <h2 class="news-title">Epic Adventure Quest: Winter Update Now Live!</h2>
+                            <p class="news-excerpt">
+                                The massive winter update has arrived! Explore new frozen landscapes, battle ice elementals, and discover legendary winter-themed items. Plus, experience our brand new co-op dungeon system that lets you team up with friends for epic loot.
+                            </p>
+                            <a href="https://www.youtube.com/@your-channel" target="_blank" class="news-link">
+                                Watch Trailer →
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Regular Articles -->
+                <article class="news-article" data-animate>
+                    <div class="news-content">
+                        <div class="news-thumbnail">
+                            Thumbnail
+                        </div>
+                        <div class="news-info">
+                            <div class="news-meta">
+                                <span class="news-date">January 10, 2024</span>
+                                <span class="news-category">Devlog</span>
+                            </div>
+                            <h2 class="news-title">Behind the Scenes: Creating Neon Racer's Cyberpunk World</h2>
+                            <p class="news-excerpt">
+                                Join us as we dive deep into the art direction and world-building process for Neon Racer 2077. Learn how we crafted the dystopian megacity and designed the futuristic vehicles.
+                            </p>
+                            <a href="https://www.youtube.com/@your-channel" target="_blank" class="news-link">
+                                Watch Devlog →
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-article" data-animate>
+                    <div class="news-content">
+                        <div class="news-thumbnail">
+                            Thumbnail
+                        </div>
+                        <div class="news-info">
+                            <div class="news-meta">
+                                <span class="news-date">January 5, 2024</span>
+                                <span class="news-category">Announcement</span>
+                            </div>
+                            <h2 class="news-title">Puzzle Masters Enters Closed Beta Testing</h2>
+                            <p class="news-excerpt">
+                                We're excited to announce that Puzzle Masters is now in closed beta! Selected players will get early access to test our new puzzle mechanics and provide feedback. Sign up for a chance to participate!
+                            </p>
+                            <a href="#signup" class="news-link">
+                                Sign Up for Beta →
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-article" data-animate>
+                    <div class="news-content">
+                        <div class="news-thumbnail">
+                            Thumbnail
+                        </div>
+                        <div class="news-info">
+                            <div class="news-meta">
+                                <span class="news-date">December 28, 2023</span>
+                                <span class="news-category">Community</span>
+                            </div>
+                            <h2 class="news-title">Year in Review: Thank You for an Amazing 2023!</h2>
+                            <p class="news-excerpt">
+                                As we wrap up 2023, we want to thank our incredible community for their support. From reaching 50,000 players to launching two new titles, it's been an unforgettable year. Here's what's coming in 2024!
+                            </p>
+                            <a href="#" class="news-link">
+                                Read More →
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-article" data-animate>
+                    <div class="news-content">
+                        <div class="news-thumbnail">
+                            Thumbnail
+                        </div>
+                        <div class="news-info">
+                            <div class="news-meta">
+                                <span class="news-date">December 20, 2023</span>
+                                <span class="news-category">Devlog</span>
+                            </div>
+                            <h2 class="news-title">Sound Design Deep Dive: Creating Immersive Audio</h2>
+                            <p class="news-excerpt">
+                                Sound is half the experience! In this devlog, we explore how we create the soundscapes for our games, from ambient environmental audio to epic battle music.
+                            </p>
+                            <a href="https://www.youtube.com/@your-channel" target="_blank" class="news-link">
+                                Watch Devlog →
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Devlog Video Section -->
+            <div class="devlog-embed" data-animate>
+                <h3>Latest Devlogs on YouTube</h3>
+                <div class="video-grid">
+                    <div class="video-item">
+                        <a href="https://www.youtube.com/@your-channel" target="_blank">
+                            <div class="video-placeholder"></div>
+                            <div class="video-title">Devlog #12: New Combat System</div>
+                        </a>
+                    </div>
+                    <div class="video-item">
+                        <a href="https://www.youtube.com/@your-channel" target="_blank">
+                            <div class="video-placeholder"></div>
+                            <div class="video-title">Devlog #11: Level Design Process</div>
+                        </a>
+                    </div>
+                    <div class="video-item">
+                        <a href="https://www.youtube.com/@your-channel" target="_blank">
+                            <div class="video-placeholder"></div>
+                            <div class="video-title">Devlog #10: Character Animation</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                        <span class="logo-subtitle">GAMES</span>
+                    </div>
+                    <p>Crafting unforgettable gaming experiences</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Navigate</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="games.html">Games</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="press.html">Press Kit</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                            <li><a href="privacy.html#terms">Terms of Service</a></li>
+                            <li><a href="press.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="https://youtube.com/@your-channel" target="_blank">YouTube</a></li>
+                            <li><a href="https://twitter.com/your-handle" target="_blank">Twitter</a></li>
+                            <li><a href="https://discord.gg/your-server" target="_blank">Discord</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 VEETEE Games. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - VEETEE Games</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .games-header {
+            padding: 12rem 0 6rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-lighter) 100%);
+        }
+
+        .games-header h1 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .games-header p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+        }
+
+        .games-section {
+            padding: 4rem 0;
+        }
+
+        .game-detail {
+            background: var(--dark-card);
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 4rem;
+            transition: all 0.4s ease;
+        }
+
+        .game-detail:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.15);
+        }
+
+        .game-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+        }
+
+        .game-detail-image {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, var(--dark-lighter), var(--dark-card));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .game-detail-info {
+            padding: 3rem 3rem 3rem 0;
+        }
+
+        .game-detail-title {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .game-detail-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .meta-label {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .game-detail-description {
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .game-features {
+            margin-bottom: 2.5rem;
+        }
+
+        .game-features h3 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .features-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .features-list li {
+            color: var(--text-dim);
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-download {
+            background: var(--primary);
+            color: var(--dark);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px rgba(0, 255, 136, 0.5);
+        }
+
+        .btn-wishlist {
+            background: transparent;
+            color: var(--accent-purple);
+            border: 2px solid var(--accent-purple);
+        }
+
+        .btn-wishlist:hover {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .btn-steam {
+            background: #171a21;
+            color: #c7d5e0;
+            border: 2px solid #c7d5e0;
+        }
+
+        .btn-steam:hover {
+            background: #c7d5e0;
+            color: #171a21;
+        }
+
+        .btn-playstore {
+            background: #01875f;
+            color: white;
+        }
+
+        .btn-playstore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px rgba(1, 135, 95, 0.4);
+        }
+
+        .btn-appstore {
+            background: #0d7eff;
+            color: white;
+        }
+
+        .btn-appstore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px rgba(13, 126, 255, 0.4);
+        }
+
+        @media (max-width: 968px) {
+            .game-detail-content {
+                grid-template-columns: 1fr;
+            }
+
+            .game-detail-info {
+                padding: 2rem;
+            }
+
+            .game-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                <span class="logo-subtitle">GAMES</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="games.html" class="nav-link active">Games</a></li>
+                <li><a href="news.html" class="nav-link">News</a></li>
+                <li><a href="press.html" class="nav-link">Press Kit</a></li>
+                <li><a href="privacy.html" class="nav-link">Privacy</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="games-header">
+        <div class="container">
+            <h1>Our Games</h1>
+            <p>Explore our portfolio of innovative gaming experiences</p>
+        </div>
+    </section>
+
+    <section class="games-section">
+        <div class="container">
+            
+            <!-- Game 1 -->
+            <div class="game-detail" data-animate>
+                <div class="game-detail-content">
+                    <div class="game-detail-image">
+                        Game Screenshot/Cover
+                    </div>
+                    <div class="game-detail-info">
+                        <h2 class="game-detail-title">Epic Adventure Quest</h2>
+                        <div class="game-detail-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Platform:</span>
+                                <span>PC, Mobile</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Genre:</span>
+                                <span>Action RPG</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Status:</span>
+                                <span class="game-status status-released">Available Now</span>
+                            </div>
+                        </div>
+                        <p class="game-detail-description">
+                            Embark on an epic journey through mystical lands filled with danger, treasure, and unforgettable characters. Battle fierce enemies, solve ancient puzzles, and uncover the secrets of a forgotten civilization in this action-packed RPG adventure.
+                        </p>
+                        <div class="game-features">
+                            <h3>Key Features</h3>
+                            <ul class="features-list">
+                                <li>Stunning visual effects</li>
+                                <li>Deep character customization</li>
+                                <li>Epic boss battles</li>
+                                <li>Rich storyline</li>
+                                <li>Multiplayer co-op mode</li>
+                                <li>Regular content updates</li>
+                            </ul>
+                        </div>
+                        <div class="game-actions">
+                            <a href="https://play.google.com/store" target="_blank" class="action-btn btn-playstore">📱 Google Play</a>
+                            <a href="https://apps.apple.com" target="_blank" class="action-btn btn-appstore">🍎 App Store</a>
+                            <a href="https://store.steampowered.com" target="_blank" class="action-btn btn-steam">🎮 Steam</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 2 -->
+            <div class="game-detail" data-animate>
+                <div class="game-detail-content">
+                    <div class="game-detail-image">
+                        Game Screenshot/Cover
+                    </div>
+                    <div class="game-detail-info">
+                        <h2 class="game-detail-title">Neon Racer 2077</h2>
+                        <div class="game-detail-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Platform:</span>
+                                <span>PC, Console</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Genre:</span>
+                                <span>Racing</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Status:</span>
+                                <span class="game-status status-upcoming">Coming Soon</span>
+                            </div>
+                        </div>
+                        <p class="game-detail-description">
+                            Experience the future of racing in this high-octane cyberpunk racer. Customize your vehicle with cutting-edge technology, compete in underground circuits, and dominate the neon-lit streets of a dystopian megacity.
+                        </p>
+                        <div class="game-features">
+                            <h3>Key Features</h3>
+                            <ul class="features-list">
+                                <li>Futuristic vehicle customization</li>
+                                <li>Dynamic weather system</li>
+                                <li>Online multiplayer races</li>
+                                <li>Story-driven campaign</li>
+                                <li>Stunning cyberpunk visuals</li>
+                                <li>60+ unique tracks</li>
+                            </ul>
+                        </div>
+                        <div class="game-actions">
+                            <a href="https://store.steampowered.com" target="_blank" class="action-btn btn-wishlist">⭐ Add to Wishlist</a>
+                            <a href="https://www.youtube.com/@your-channel" target="_blank" class="action-btn btn-steam">📺 Watch Trailer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game 3 -->
+            <div class="game-detail" data-animate>
+                <div class="game-detail-content">
+                    <div class="game-detail-image">
+                        Game Screenshot/Cover
+                    </div>
+                    <div class="game-detail-info">
+                        <h2 class="game-detail-title">Puzzle Masters</h2>
+                        <div class="game-detail-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Platform:</span>
+                                <span>Mobile</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Genre:</span>
+                                <span>Puzzle</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Status:</span>
+                                <span class="game-status status-development">In Development</span>
+                            </div>
+                        </div>
+                        <p class="game-detail-description">
+                            Challenge your mind with hundreds of clever puzzles that blend logic, strategy, and creativity. Perfect for quick gaming sessions or extended puzzle-solving marathons. Can you master them all?
+                        </p>
+                        <div class="game-features">
+                            <h3>Key Features</h3>
+                            <ul class="features-list">
+                                <li>500+ unique puzzles</li>
+                                <li>Daily challenges</li>
+                                <li>Hint system</li>
+                                <li>Leaderboards</li>
+                                <li>Minimalist design</li>
+                                <li>Offline play</li>
+                            </ul>
+                        </div>
+                        <div class="game-actions">
+                            <a href="#newsletter" class="action-btn btn-wishlist">🔔 Get Notified</a>
+                            <a href="news.html" class="action-btn btn-steam">📰 Dev Updates</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                        <span class="logo-subtitle">GAMES</span>
+                    </div>
+                    <p>Crafting unforgettable gaming experiences</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Navigate</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="games.html">Games</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="press.html">Press Kit</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                            <li><a href="privacy.html#terms">Terms of Service</a></li>
+                            <li><a href="press.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="https://youtube.com/@your-channel" target="_blank">YouTube</a></li>
+                            <li><a href="https://twitter.com/your-handle" target="_blank">Twitter</a></li>
+                            <li><a href="https://discord.gg/your-server" target="_blank">Discord</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 VEETEE Games. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
