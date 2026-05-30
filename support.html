@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - VEETEE Games</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Support-page only extras — no overrides to styles.css */
+        .support-hero {
+            padding: 160px 2rem 6rem;
+            text-align: center;
+            position: relative;
+        }
+        .support-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 30% 50%, rgba(48, 158, 255, 0.08) 0%, transparent 55%),
+                radial-gradient(circle at 70% 30%, rgba(0, 212, 255, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .support-hero h1 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 1.2rem;
+        }
+        .support-hero p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Layout */
+        .support-section {
+            padding: 4rem 0 8rem;
+        }
+        .support-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Info cards — reuse dark-card style */
+        .info-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        .info-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(48, 158, 255, 0.15);
+            border-radius: 8px;
+            padding: 1.6rem 1.8rem;
+            border-left: 3px solid var(--primary);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .info-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 24px rgba(48, 158, 255, 0.12);
+        }
+        .info-card h3 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+        }
+        .info-card p {
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            line-height: 1.65;
+        }
+        .info-card a { color: var(--accent-blue); text-decoration: none; transition: color 0.2s; }
+        .info-card a:hover { color: var(--primary); }
+
+        .response-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: #00ff88;
+            margin-top: 0.7rem;
+        }
+        .response-badge::before {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #00ff88;
+            animation: livePulse 2s infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.4); }
+        }
+
+        /* Form panel */
+        .form-panel {
+            background: var(--dark-card);
+            border: 1px solid rgba(48, 158, 255, 0.15);
+            border-radius: 8px;
+            padding: 2.5rem;
+        }
+        .form-panel h2 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .form-sub {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+
+        .form-group { margin-bottom: 1.4rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+        .form-panel label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 0.45rem;
+        }
+        .form-panel label span { color: var(--secondary); }
+
+        .form-panel input,
+        .form-panel select,
+        .form-panel textarea {
+            width: 100%;
+            background: var(--dark-lighter);
+            border: 1px solid rgba(48, 158, 255, 0.2);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.88rem;
+            padding: 0.8rem 1rem;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            appearance: none;
+        }
+        .form-panel input::placeholder,
+        .form-panel textarea::placeholder { color: var(--text-dim); opacity: 0.5; }
+        .form-panel input:focus,
+        .form-panel select:focus,
+        .form-panel textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(48, 158, 255, 0.1);
+        }
+        .form-panel select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23309eff' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+        .form-panel select option { background: var(--dark-card); }
+        .form-panel textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
+
+        .char-count {
+            text-align: right;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            margin-top: 0.3rem;
+        }
+
+        /* Submit — extends .btn .btn-primary from styles.css */
+        .btn-submit {
+            width: 100%;
+            margin-top: 0.5rem;
+            padding: 1rem 2.5rem;
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            background: var(--primary);
+            color: var(--dark);
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(48, 158, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(48, 158, 255, 0.5);
+        }
+        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-submit .btn-loading { display: none; }
+        .btn-submit.loading .btn-text { display: none; }
+        .btn-submit.loading .btn-loading { display: inline; }
+
+        /* Success state */
+        .success-overlay { display: none; text-align: center; padding: 3rem 1rem; }
+        .success-overlay.visible { display: block; }
+        .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .success-overlay h3 {
+            font-family: 'Oxanium', sans-serif;
+            font-size: 1.6rem;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+        .success-overlay p { color: var(--text-dim); font-size: 0.95rem; }
+        .btn-back {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.8rem;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-family: 'Oxanium', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: transparent;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover { background: var(--primary); color: var(--dark); }
+
+        @media (max-width: 768px) {
+            .support-layout { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-panel { padding: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar — identical to other pages -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                <span class="logo-subtitle">GAMES</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="games.html" class="nav-link">Games</a></li>
+                <li><a href="news.html" class="nav-link">News</a></li>
+                <li><a href="press.html" class="nav-link">Press Kit</a></li>
+                <li><a href="privacy.html" class="nav-link">Privacy</a></li>
+                <li><a href="support.html" class="nav-link active">Support</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="support-hero">
+        <h1 class="section-title">Player Support</h1>
+        <p>Run into a bug, billing issue, or just have a question? We've got you covered.</p>
+    </section>
+
+    <!-- Main -->
+    <section class="support-section">
+        <div class="container">
+            <div class="support-layout">
+
+                <!-- Info Panel -->
+                <aside class="info-panel" data-animate>
+
+                    <div class="info-card">
+                        <h3>Email Support</h3>
+                        <p>All messages go directly to our team at<br>
+                        <a href="mailto:support@veeteegames.com">support@veeteegames.com</a></p>
+                        <div class="response-badge">Typically replies within 48 hrs</div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Community</h3>
+                        <p>Join our Discord for faster peer help, game discussions, and direct access to the dev team.</p>
+                        <p style="margin-top:0.6rem"><a href="https://discord.gg/vRTEazs3x5" target="_blank">→ Join Discord</a></p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Before You Write</h3>
+                        <p>Include your platform, game version, and a short description of the issue. Screenshots or clips help us reproduce bugs much faster.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Press & Business</h3>
+                        <p>For media inquiries or partnerships, visit our <a href="press.html">Press Kit</a> page instead.</p>
+                    </div>
+
+                </aside>
+
+                <!-- Form Panel -->
+                <div class="form-panel" data-animate>
+
+                    <div id="formContainer">
+                        <h2>Send a Message</h2>
+                        <p class="form-sub">// fill in the details below</p>
+
+                        <form id="supportForm" novalidate>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name <span>*</span></label>
+                                    <input type="text" id="firstName" name="firstName" placeholder="Ada" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name <span>*</span></label>
+                                    <input type="text" id="lastName" name="lastName" placeholder="Lovelace" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address <span>*</span></label>
+                                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="game">Related Game</label>
+                                <select id="game" name="game">
+                                    <option value="">Select a game (optional)</option>
+                                    <option value="general">General / Not game-specific</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Category <span>*</span></label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a topic…</option>
+                                    <option value="bug">Bug Report</option>
+                                    <option value="account">Account Issue</option>
+                                    <option value="billing">Billing / Purchase</option>
+                                    <option value="feedback">Feedback / Suggestion</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message <span>*</span></label>
+                                <textarea id="message" name="message" placeholder="Describe your issue or question in as much detail as you can…" maxlength="2000" required></textarea>
+                                <div class="char-count"><span id="charCount">0</span> / 2000</div>
+                            </div>
+
+                            <button type="submit" class="btn-submit" id="submitBtn">
+                                <span class="btn-text">Send Message</span>
+                                <span class="btn-loading">Sending…</span>
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <!-- Success -->
+                    <div class="success-overlay" id="successOverlay">
+                        <div class="success-icon">✓</div>
+                        <h3>Message Sent!</h3>
+                        <p>Thanks for reaching out. We'll get back to you within 48 hours at the email you provided.</p>
+                        <button class="btn-back" id="backBtn">Send Another</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer — identical to other pages -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="logo-vee">VEE</span><span class="logo-tee">TEE</span>
+                        <span class="logo-subtitle">GAMES</span>
+                    </div>
+                    <p>Crafting unforgettable gaming experiences</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Navigate</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="games.html">Games</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="press.html">Press Kit</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="privacy.html">Privacy Policy</a></li>
+                            <li><a href="privacy.html#terms">Terms of Service</a></li>
+                            <li><a href="press.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="https://www.youtube.com/@VEETEEGames" target="_blank">YouTube</a></li>
+                            <li><a href="https://x.com/VEETEEGames" target="_blank">Twitter</a></li>
+                            <li><a href="https://discord.gg/vRTEazs3x5" target="_blank">Discord</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 VEETEE Games. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Char counter
+        const msgArea = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+        msgArea.addEventListener('input', () => { charCount.textContent = msgArea.value.length; });
+
+        // Submit
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName  = document.getElementById('lastName').value.trim();
+            const email     = document.getElementById('email').value.trim();
+            const game      = document.getElementById('game').value;
+            const subject   = document.getElementById('subject').value;
+            const message   = document.getElementById('message').value.trim();
+
+            if (!firstName || !lastName || !email || !subject || !message) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            const to = 'support@veeteegames.com';
+            const subjectLine = encodeURIComponent(`[${subject.toUpperCase()}] ${firstName} ${lastName}`);
+            const body = encodeURIComponent(
+                `Name: ${firstName} ${lastName}\nEmail: ${email}\nGame: ${game || 'N/A'}\nCategory: ${subject}\n\n${message}`
+            );
+
+            setTimeout(() => {
+                window.location.href = `mailto:${to}?subject=${subjectLine}&body=${body}`;
+                document.getElementById('formContainer').style.display = 'none';
+                document.getElementById('successOverlay').classList.add('visible');
+            }, 600);
+        });
+
+        // Reset
+        document.getElementById('backBtn').addEventListener('click', () => {
+            document.getElementById('supportForm').reset();
+            charCount.textContent = '0';
+            const btn = document.getElementById('submitBtn');
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            document.getElementById('formContainer').style.display = 'block';
+            document.getElementById('successOverlay').classList.remove('visible');
+        });
+    </script>
+</body>
+</html>
