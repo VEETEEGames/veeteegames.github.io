@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
 <title>The Closet Shop</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,7 +40,9 @@
   --shadow: 0 10px 30px rgba(0, 0, 0, .45); color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
 h1, h2, h3 { font-family: var(--f-display); line-height: 1.15; margin: 0; text-wrap: balance; }
 button, input, select, textarea { font: inherit; color: inherit; }
@@ -182,6 +190,8 @@ button { cursor: pointer; }
 .photo-drop img { max-height: 140px; margin: 8px auto 0; border-radius: 8px; display: block; }
 .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: 14px; z-index: 30; box-shadow: var(--shadow); max-width: calc(100% - 32px); }
 </style>
+</head>
+<body>
 
 <div class="ribbon"><div class="wrap"><span>Demo mockup · nothing is charged · data stays on this device</span><button id="reset" type="button">Reset demo</button></div></div>
 
@@ -559,3 +569,5 @@ if (location.hash === "#owner") view.mode = "owner";
 window.addEventListener("hashchange", () => { view.mode = location.hash === "#owner" ? "owner" : "shop"; renderAll(); });
 renderAll();
 </script>
+</body>
+</html>
