@@ -1,0 +1,561 @@
+<title>The Closet Shop</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: phone-first storefront; sticky top bar; product grid; slide-up sheets for cart/checkout; owner dashboard behind a tab */
+:root {
+  --bg: #fff8fa;
+  --surface: #ffffff;
+  --ink: #2b1630;
+  --muted: #7a6680;
+  --line: #eedde6;
+  --accent: #c2185b;
+  --accent-ink: #ffffff;
+  --gold: #e0a526;
+  --soft: #fbe7ef;
+  --ok: #1f8a5b;
+  --warn: #b7791f;
+  --wa: #128c4a;
+  --shadow: 0 10px 30px rgba(60, 20, 50, .12);
+  --f-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1220; --surface: #251a2b; --ink: #f6e9f0; --muted: #b8a3bf; --line: #3a2a40;
+    --accent: #ff5c97; --accent-ink: #1b1220; --gold: #f0bd4c; --soft: #3a1f33; --ok: #4fd08f; --warn: #f0bd4c; --wa: #3ccf7f;
+    --shadow: 0 10px 30px rgba(0, 0, 0, .45); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1220; --surface: #251a2b; --ink: #f6e9f0; --muted: #b8a3bf; --line: #3a2a40;
+  --accent: #ff5c97; --accent-ink: #1b1220; --gold: #f0bd4c; --soft: #3a1f33; --ok: #4fd08f; --warn: #f0bd4c; --wa: #3ccf7f;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .45); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.15; margin: 0; text-wrap: balance; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.money { font-variant-numeric: tabular-nums; }
+
+/* Top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 12px; padding-block: 10px; }
+.logo { font-family: var(--f-display); font-weight: 800; font-size: 22px; letter-spacing: -.02em; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.logo span { color: var(--accent); }
+.mode { display: flex; background: var(--soft); border-radius: 999px; padding: 3px; }
+.mode button { border: 0; background: none; padding: 6px 12px; border-radius: 999px; font-weight: 500; font-size: 13px; color: var(--muted); }
+.mode button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.cart-btn { position: relative; border: 0; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 8px 14px; font-weight: 700; display: flex; gap: 6px; align-items: center; }
+.cart-btn .count { background: var(--accent-ink); color: var(--accent); border-radius: 999px; min-width: 20px; height: 20px; font-size: 12px; display: grid; place-items: center; padding: 0 5px; }
+
+/* Demo ribbon */
+.ribbon { background: var(--ink); color: var(--bg); font-size: 12.5px; }
+.ribbon .wrap { padding-block: 6px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; }
+.ribbon button { background: none; border: 0; color: inherit; text-decoration: underline; font-size: 12.5px; padding: 0; }
+
+/* Hero */
+.hero { padding-block: 22px 8px; display: grid; gap: 6px; }
+.hero h1 { font-size: clamp(28px, 6vw, 44px); font-weight: 800; letter-spacing: -.03em; }
+.hero p { margin: 0; color: var(--muted); max-width: 60ch; }
+.steps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.steps span { font-size: 12.5px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; color: var(--muted); }
+.steps b { color: var(--accent); margin-right: 4px; }
+
+/* Filters */
+.filters { display: flex; gap: 8px; overflow-x: auto; padding-block: 14px; scrollbar-width: none; }
+.chip { flex: none; border: 1px solid var(--line); background: var(--surface); padding: 7px 14px; border-radius: 999px; font-size: 14px; font-weight: 500; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.search { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 11px 14px; }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding-bottom: 20px; }
+.card { background: var(--surface); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--line); }
+.card .pic { aspect-ratio: 4 / 5; max-width: 100%; position: relative; background: var(--soft); }
+.card .pic img, .card .pic svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.badge { position: absolute; top: 8px; left: 8px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--surface); color: var(--ink); }
+.badge.out { background: var(--ink); color: var(--bg); }
+.badge.low { background: var(--gold); color: #2b1630; }
+.card .body { padding: 10px 12px 12px; display: grid; gap: 6px; flex: 1; align-content: start; }
+.card h3 { font-size: 15px; font-weight: 700; font-family: var(--f-body); }
+.price { font-family: var(--f-display); font-weight: 700; font-size: 18px; }
+.sizes { display: flex; gap: 5px; flex-wrap: wrap; }
+.size { border: 1px solid var(--line); background: none; border-radius: 8px; min-width: 34px; padding: 4px 7px; font-size: 12.5px; font-weight: 500; }
+.size[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+.add { margin-top: 4px; border: 0; border-radius: 10px; padding: 9px; font-weight: 700; background: var(--soft); color: var(--accent); }
+.add:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Request banner */
+.request { margin-block: 8px 32px; background: var(--ink); color: var(--bg); border-radius: 20px; padding: 22px; display: grid; gap: 14px; grid-template-columns: 1fr auto; align-items: center; }
+.request h2 { font-size: 22px; }
+.request p { margin: 4px 0 0; opacity: .8; font-size: 14px; }
+@media (max-width: 560px) { .request { grid-template-columns: 1fr; } }
+
+.btn { border: 0; border-radius: 12px; padding: 12px 18px; font-weight: 700; background: var(--accent); color: var(--accent-ink); }
+.btn.ghost { background: var(--soft); color: var(--accent); }
+.btn.wa { background: var(--wa); color: #fff; text-decoration: none; display: inline-flex; gap: 8px; align-items: center; justify-content: center; }
+.btn.block { width: 100%; }
+.btn.small { padding: 7px 12px; font-size: 13px; border-radius: 9px; }
+
+/* Sheets */
+.scrim { position: fixed; inset: 0; background: rgba(20, 8, 20, .45); z-index: 20; }
+.sheet { position: fixed; z-index: 21; left: 50%; bottom: 0; transform: translateX(-50%); width: min(520px, 100%); max-height: 92%; overflow-y: auto; background: var(--surface); border-radius: 22px 22px 0 0; box-shadow: var(--shadow); padding: 18px max(18px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px)); animation: up .22s ease-out; }
+@keyframes up { from { transform: translate(-50%, 30px); opacity: .6; } }
+@media (prefers-reduced-motion: reduce) { .sheet { animation: none; } }
+.sheet-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.sheet-head h2 { font-size: 22px; flex: 1; }
+.x { border: 0; background: var(--soft); width: 34px; height: 34px; border-radius: 50%; font-size: 18px; color: var(--ink); }
+.progress { display: flex; gap: 6px; margin-bottom: 16px; }
+.progress i { flex: 1; height: 4px; border-radius: 4px; background: var(--line); }
+.progress i.on { background: var(--accent); }
+.line { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding-block: 10px; border-bottom: 1px solid var(--line); }
+.line .thumb { width: 56px; height: 70px; border-radius: 10px; overflow: hidden; background: var(--soft); }
+.line .thumb img, .line .thumb svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.line .meta { min-width: 0; }
+.line .meta b { display: block; font-size: 14px; }
+.line .meta small { color: var(--muted); }
+.qty { display: flex; align-items: center; gap: 6px; }
+.qty button { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line); background: none; }
+.totals { display: grid; gap: 4px; padding-block: 12px; }
+.totals div { display: flex; justify-content: space-between; }
+.totals .grand { font-family: var(--f-display); font-weight: 800; font-size: 20px; padding-top: 6px; border-top: 1px dashed var(--line); margin-top: 4px; }
+.field { display: grid; gap: 5px; margin-bottom: 12px; }
+.field label { font-size: 13px; font-weight: 500; color: var(--muted); }
+.field input, .field select, .field textarea { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 11px; padding: 11px 12px; }
+.field textarea { min-height: 80px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opts { display: grid; gap: 8px; margin-bottom: 14px; }
+.opt { display: flex; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--soft); }
+.opt span { flex: 1; }
+.opt small { display: block; color: var(--muted); }
+.paybox { border: 1px dashed var(--line); border-radius: 14px; padding: 14px; margin-bottom: 14px; display: grid; gap: 6px; font-size: 14px; }
+.paybox .acct { font-family: var(--f-display); font-size: 22px; font-weight: 800; letter-spacing: .04em; }
+.note { font-size: 12.5px; color: var(--muted); }
+.success { text-align: center; display: grid; gap: 10px; justify-items: center; }
+.tick { width: 64px; height: 64px; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; font-size: 32px; }
+.code { font-family: var(--f-display); font-weight: 800; font-size: 26px; letter-spacing: .06em; color: var(--accent); }
+.msg { width: 100%; text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: 13px; white-space: pre-wrap; max-height: 180px; overflow: auto; }
+
+/* Dashboard */
+.dash { padding-block: 20px 40px; display: grid; gap: 18px; }
+.dash-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; justify-content: space-between; }
+.dash-head h1 { font-size: 28px; letter-spacing: -.02em; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.stat b { display: block; font-family: var(--f-display); font-size: 26px; font-weight: 800; }
+.stat small { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 480px) { .stat b { font-size: 21px; } }
+.tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tabs button { border: 0; background: none; padding: 10px 12px; font-weight: 700; color: var(--muted); border-bottom: 2px solid transparent; white-space: nowrap; }
+.tabs button[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+.tabs .n { background: var(--soft); color: var(--accent); border-radius: 999px; padding: 0 7px; font-size: 12px; margin-left: 4px; }
+.list { display: grid; gap: 10px; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 8px; }
+.item-top { display: flex; gap: 10px; align-items: start; justify-content: space-between; flex-wrap: wrap; }
+.item-top > div { min-width: 0; }
+.item h3 { font-size: 16px; font-family: var(--f-body); }
+.item p { margin: 0; font-size: 14px; color: var(--muted); }
+.pill { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.pill.paid { background: var(--soft); color: var(--accent); }
+.pill.packed { background: var(--gold); color: #2b1630; }
+.pill.sent, .pill.found { background: var(--ok); color: #fff; }
+.pill.open { background: var(--gold); color: #2b1630; }
+.pill.nope { background: var(--line); color: var(--muted); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.prod-row { display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; }
+.prod-row .thumb { width: 52px; height: 64px; border-radius: 9px; overflow: hidden; background: var(--soft); }
+.prod-row .thumb img, .prod-row .thumb svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.prod-row .meta { min-width: 0; }
+.prod-row .meta b { display: block; }
+.prod-row .meta small { color: var(--muted); }
+.stock { display: flex; align-items: center; gap: 6px; }
+.stock button { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line); background: none; }
+.stock span { min-width: 24px; text-align: center; font-variant-numeric: tabular-nums; font-weight: 700; }
+.empty { text-align: center; color: var(--muted); padding: 30px 10px; border: 1px dashed var(--line); border-radius: 14px; }
+.photo-drop { border: 1px dashed var(--line); border-radius: 12px; padding: 14px; text-align: center; color: var(--muted); font-size: 13px; }
+.photo-drop img { max-height: 140px; margin: 8px auto 0; border-radius: 8px; display: block; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: 14px; z-index: 30; box-shadow: var(--shadow); max-width: calc(100% - 32px); }
+</style>
+
+<div class="ribbon"><div class="wrap"><span>Demo mockup · nothing is charged · data stays on this device</span><button id="reset" type="button">Reset demo</button></div></div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="logo" id="logo"></div>
+    <div class="mode" role="group" aria-label="View">
+      <button type="button" id="m-shop" aria-pressed="true">Shop</button>
+      <button type="button" id="m-owner" aria-pressed="false">Owner</button>
+    </div>
+    <button class="cart-btn" id="cartBtn" type="button" aria-label="Open bag">Bag <span class="count" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<main id="shop" class="wrap">
+  <section class="hero">
+    <h1>New pieces, real prices. Order in a minute.</h1>
+    <p>Pick your size, pay securely, and you'll land straight in my WhatsApp chat with your order already typed out.</p>
+    <div class="steps"><span><b>1</b>Choose</span><span><b>2</b>Pay</span><span><b>3</b>Chat on WhatsApp</span></div>
+  </section>
+  <div class="filters" id="filters" role="group" aria-label="Categories"></div>
+  <input class="search" id="q" type="search" placeholder="Search dresses, bags, sizes…" aria-label="Search">
+  <div style="height:14px"></div>
+  <div class="grid" id="grid"></div>
+  <section class="request">
+    <div>
+      <h2>Can't find what you want?</h2>
+      <p>Send a photo or describe it. I'll source it and message you when it's in.</p>
+    </div>
+    <button class="btn" type="button" id="reqBtn">Request an item</button>
+  </section>
+</main>
+
+<main id="owner" class="wrap" hidden>
+  <div class="dash">
+    <div class="dash-head">
+      <div><h1>Good day, boss</h1><p class="note" style="margin:4px 0 0">Everything that came in while you were away.</p></div>
+      <button class="btn" type="button" id="addProd">+ Add item</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="tabs" role="group" aria-label="Sections" id="tabs"></div>
+    <div class="list" id="panel"></div>
+  </div>
+</main>
+
+<div id="layer"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const naira = n => "₦" + Math.round(n).toLocaleString("en-NG");
+const CATS = ["All", "Dresses", "Tops", "Bottoms", "Bags", "Shoes", "Beauty"];
+const DELIVERY = { pickup: { label: "Pick up", note: "Collect from me, free", fee: 0 }, lagos: { label: "Delivery within Lagos", note: "1–2 days", fee: 2500 }, out: { label: "Delivery outside Lagos", note: "Waybill, 2–4 days", fee: 5000 } };
+
+const SEED = () => ({
+  settings: { shopName: "The Closet", whatsapp: "2348012345678", bank: "Moniepoint", acct: "8012345678" },
+  products: [
+    { id: "p1", name: "Ankara wrap midi dress", price: 18500, cat: "Dresses", sizes: ["S", "M", "L", "XL"], stock: 6, color: "#f2b33d", tone: "#c2185b" },
+    { id: "p2", name: "Satin slip dress", price: 22000, cat: "Dresses", sizes: ["S", "M", "L"], stock: 2, color: "#e8c7d6", tone: "#7a2e55" },
+    { id: "p3", name: "Corset top", price: 12000, cat: "Tops", sizes: ["S", "M", "L"], stock: 8, color: "#2b1630", tone: "#f6c1d6" },
+    { id: "p4", name: "Wide-leg trousers", price: 15000, cat: "Bottoms", sizes: ["8", "10", "12", "14"], stock: 5, color: "#cfe3d8", tone: "#1f5a44" },
+    { id: "p5", name: "Mini top-handle bag", price: 14500, cat: "Bags", sizes: ["One size"], stock: 3, color: "#f7dfc9", tone: "#8a4b22" },
+    { id: "p6", name: "Block heel sandals", price: 19000, cat: "Shoes", sizes: ["38", "39", "40", "41"], stock: 0, color: "#d9d2f2", tone: "#3b2a7a" },
+    { id: "p7", name: "Vanilla body mist set", price: 9500, cat: "Beauty", sizes: ["One size"], stock: 12, color: "#fde3ec", tone: "#c2185b" },
+    { id: "p8", name: "Crop blazer", price: 17500, cat: "Tops", sizes: ["S", "M", "L"], stock: 4, color: "#c9dcf2", tone: "#1d3a6b" }
+  ],
+  orders: [
+    { id: "CL-4821", name: "Tolu A.", phone: "2348031112222", items: [{ name: "Corset top", size: "M", qty: 1, price: 12000 }], delivery: "lagos", address: "12 Admiralty Way, Lekki", total: 14500, status: "paid", at: Date.now() - 36e5 * 3 },
+    { id: "CL-4817", name: "Chioma O.", phone: "2348053334444", items: [{ name: "Ankara wrap midi dress", size: "L", qty: 1, price: 18500 }, { name: "Vanilla body mist set", size: "One size", qty: 1, price: 9500 }], delivery: "out", address: "Abuja (GIG waybill)", total: 33000, status: "packed", at: Date.now() - 36e5 * 26 }
+  ],
+  requests: [
+    { id: "r1", name: "Amaka", phone: "2348075556666", what: "Green sequin party dress, like the one on Tems' IG last week", size: "M", budget: 30000, status: "open", at: Date.now() - 36e5 * 5 },
+    { id: "r2", name: "Bisi", phone: "2348097778888", what: "Black block heel sandals size 40", size: "40", budget: 20000, status: "open", at: Date.now() - 36e5 * 30 }
+  ],
+  cart: []
+});
+
+let S;
+try { S = JSON.parse(localStorage.getItem("closet-demo")) || SEED(); } catch { S = SEED(); }
+const save = () => { try { localStorage.setItem("closet-demo", JSON.stringify(S)); } catch {} };
+
+let view = { mode: "shop", cat: "All", q: "", tab: "orders", picked: {} };
+
+function art(p) {
+  if (p.img) return `<img src="${p.img}" alt="${esc(p.name)}">`;
+  const shapes = {
+    Dresses: `<path d="M43 20h14l-1 14 15 52H29l15-52z"/><path d="M44 20l-3-8M56 20l3-8" stroke-width="2" stroke="currentColor" fill="none"/>`,
+    Tops: `<path d="M30 32l12-9h16l12 9-5 13-6-4v32H41V41l-6 4z"/>`,
+    Bottoms: `<path d="M35 20h30l6 66H56L50 45l-6 41H29z"/>`,
+    Bags: `<path d="M27 42h46l-5 42H32z"/><path d="M38 42c0-14 24-14 24 0" stroke-width="4" stroke="currentColor" fill="none"/>`,
+    Shoes: `<path d="M18 66h30c12 0 22-6 30-14l4 22-6 4H22z"/><path d="M70 74v12h6V72" />`,
+    Beauty: `<rect x="38" y="38" width="24" height="46" rx="6"/><rect x="44" y="24" width="12" height="14" rx="2"/>`
+  };
+  return `<svg viewBox="0 0 100 125" role="img" aria-label="${esc(p.name)}" preserveAspectRatio="xMidYMid slice"><rect width="100" height="125" fill="${p.color || "#fbe7ef"}"/><circle cx="82" cy="18" r="26" fill="#fff" opacity=".25"/><g transform="translate(0 12)" fill="${p.tone || "#c2185b"}" style="color:${p.tone || "#c2185b"}">${shapes[p.cat] || shapes.Dresses}</g></svg>`;
+}
+
+function toast(t) {
+  const el = document.createElement("div"); el.className = "toast"; el.textContent = t;
+  document.body.appendChild(el); setTimeout(() => el.remove(), 2200);
+}
+
+/* ---------- Shop ---------- */
+function renderHeader() {
+  const n = S.settings.shopName.split(" ");
+  $("#logo").innerHTML = n.length > 1 ? `${esc(n.slice(0, -1).join(" "))} <span>${esc(n.at(-1))}</span>` : `<span>${esc(n[0])}</span>`;
+  $("#cartCount").textContent = S.cart.reduce((a, c) => a + c.qty, 0);
+  $("#m-shop").setAttribute("aria-pressed", view.mode === "shop");
+  $("#m-owner").setAttribute("aria-pressed", view.mode === "owner");
+  $("#shop").hidden = view.mode !== "shop";
+  $("#owner").hidden = view.mode !== "owner";
+  $("#cartBtn").hidden = view.mode !== "shop";
+}
+
+function renderShop() {
+  $("#filters").innerHTML = CATS.map(c => `<button class="chip" type="button" data-cat="${c}" aria-pressed="${view.cat === c}">${c}</button>`).join("");
+  const q = view.q.trim().toLowerCase();
+  const list = S.products.filter(p => (view.cat === "All" || p.cat === view.cat) && (!q || (p.name + " " + p.cat + " " + p.sizes.join(" ")).toLowerCase().includes(q)));
+  $("#grid").innerHTML = list.length ? list.map(p => {
+    const picked = view.picked[p.id] || (p.sizes.length === 1 ? p.sizes[0] : "");
+    const badge = p.stock === 0 ? `<span class="badge out">Sold out</span>` : p.stock <= 3 ? `<span class="badge low">Only ${p.stock} left</span>` : "";
+    return `<article class="card">
+      <div class="pic">${art(p)}${badge}</div>
+      <div class="body">
+        <h3>${esc(p.name)}</h3>
+        <div class="price money">${naira(p.price)}</div>
+        <div class="sizes">${p.sizes.map(s => `<button class="size" type="button" data-p="${p.id}" data-size="${esc(s)}" aria-pressed="${picked === s}" ${p.stock === 0 ? "disabled" : ""}>${esc(s)}</button>`).join("")}</div>
+        <button class="add" type="button" data-add="${p.id}" ${p.stock === 0 ? "disabled" : ""}>${p.stock === 0 ? "Request restock" : "Add to bag"}</button>
+      </div></article>`;
+  }).join("") : `<p class="empty" style="grid-column:1/-1">Nothing matches that yet. Tap “Request an item” below and I'll find it for you.</p>`;
+}
+
+function addToCart(id) {
+  const p = S.products.find(x => x.id === id);
+  const size = view.picked[id] || (p.sizes.length === 1 ? p.sizes[0] : "");
+  if (!size) { toast("Pick a size first"); return; }
+  const inCart = S.cart.filter(c => c.id === id).reduce((a, c) => a + c.qty, 0);
+  if (inCart >= p.stock) { toast(`Only ${p.stock} in stock`); return; }
+  const line = S.cart.find(c => c.id === id && c.size === size);
+  line ? line.qty++ : S.cart.push({ id, size, qty: 1 });
+  save(); renderHeader(); toast(`${p.name} (${size}) added`);
+}
+
+/* ---------- Sheets ---------- */
+function sheet(html) {
+  $("#layer").innerHTML = `<div class="scrim" data-close></div><div class="sheet" role="dialog" aria-modal="true">${html}</div>`;
+  const f = $("#layer .sheet input, #layer .sheet button:not(.x)"); f && f.focus({ preventScroll: true });
+}
+const closeSheet = () => { $("#layer").innerHTML = ""; };
+const head = (t, step) => `<div class="sheet-head"><h2>${t}</h2><button class="x" type="button" data-close aria-label="Close">×</button></div>` + (step ? `<div class="progress">${[1, 2, 3].map(i => `<i class="${i <= step ? "on" : ""}"></i>`).join("")}</div>` : "");
+
+const cartLines = () => S.cart.map(c => ({ ...c, p: S.products.find(p => p.id === c.id) })).filter(c => c.p);
+const subtotal = () => cartLines().reduce((a, c) => a + c.p.price * c.qty, 0);
+
+function openCart() {
+  const lines = cartLines();
+  if (!lines.length) { sheet(head("Your bag") + `<p class="empty">Your bag is empty. Tap a size, then “Add to bag”.</p>`); return; }
+  sheet(head("Your bag", 1) + lines.map((c, i) => `<div class="line"><div class="thumb">${art(c.p)}</div><div class="meta"><b>${esc(c.p.name)}</b><small>Size ${esc(c.size)} · <span class="money">${naira(c.p.price)}</span></small></div>
+    <div class="qty"><button type="button" data-dec="${i}" aria-label="Less">−</button><span>${c.qty}</span><button type="button" data-inc="${i}" aria-label="More">+</button></div></div>`).join("") +
+    `<div class="totals"><div class="grand"><span>Subtotal</span><span class="money">${naira(subtotal())}</span></div></div><button class="btn block" type="button" id="toDetails">Continue to delivery</button>`);
+}
+
+let draft = { name: "", phone: "", delivery: "lagos", address: "", pay: "card" };
+function openDetails() {
+  const fee = DELIVERY[draft.delivery].fee;
+  sheet(head("Delivery details", 2) + `<form id="detailsForm">
+    <div class="field"><label for="d-name">Your name</label><input id="d-name" required value="${esc(draft.name)}" placeholder="e.g. Tolu Adebayo"></div>
+    <div class="field"><label for="d-phone">WhatsApp number</label><input id="d-phone" required inputmode="tel" value="${esc(draft.phone)}" placeholder="0803 111 2222"></div>
+    <div class="opts">${Object.entries(DELIVERY).map(([k, d]) => `<label class="opt"><input type="radio" name="dl" value="${k}" ${draft.delivery === k ? "checked" : ""}><span>${d.label}<small>${d.note}</small></span><b class="money">${d.fee ? naira(d.fee) : "Free"}</b></label>`).join("")}</div>
+    <div class="field" id="addrField" ${draft.delivery === "pickup" ? "hidden" : ""}><label for="d-addr">Delivery address</label><textarea id="d-addr" placeholder="House number, street, area, city">${esc(draft.address)}</textarea></div>
+    <div class="totals"><div><span>Items</span><span class="money">${naira(subtotal())}</span></div><div><span>Delivery</span><span class="money">${fee ? naira(fee) : "Free"}</span></div><div class="grand"><span>Total</span><span class="money">${naira(subtotal() + fee)}</span></div></div>
+    <button class="btn block" type="submit">Continue to payment</button></form>`);
+}
+
+function openPay() {
+  const total = subtotal() + DELIVERY[draft.delivery].fee;
+  sheet(head("Pay " + naira(total), 3) + `<div class="opts">
+    <label class="opt"><input type="radio" name="pm" value="card" ${draft.pay === "card" ? "checked" : ""}><span>Card, USSD or bank app<small>Instant confirmation through Paystack</small></span></label>
+    <label class="opt"><input type="radio" name="pm" value="transfer" ${draft.pay === "transfer" ? "checked" : ""}><span>Bank transfer<small>Send to a dedicated account for this order</small></span></label></div>
+    <div class="paybox" id="payBox">${payBox(total)}</div>
+    <button class="btn block" type="button" id="payNow">${draft.pay === "card" ? "Pay " + naira(total) : "I've sent the money"}</button>
+    <p class="note" style="text-align:center">Demo only. In the real shop this opens the payment page and confirms automatically.</p>`);
+}
+const payBox = total => draft.pay === "card"
+  ? `<b>Secure checkout</b><span class="note">Card · Bank app · USSD · Opay/Palmpay. You'll get a receipt by SMS and email.</span>`
+  : `<span class="note">Transfer exactly</span><span class="acct money">${naira(total)}</span><span class="note">to</span><span class="acct">${esc(S.settings.acct)}</span><span class="note">${esc(S.settings.bank)} · ${esc(S.settings.shopName)}. Confirms automatically within a minute.</span>`;
+
+function waLink(num, text) { return `https://wa.me/${num.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`; }
+function intlPhone(p) { const d = p.replace(/\D/g, ""); return d.startsWith("0") ? "234" + d.slice(1) : d; }
+
+function placeOrder() {
+  const lines = cartLines();
+  const fee = DELIVERY[draft.delivery].fee;
+  const order = {
+    id: "CL-" + (4822 + S.orders.length + Math.floor(Math.random() * 50)),
+    name: draft.name, phone: intlPhone(draft.phone),
+    items: lines.map(c => ({ name: c.p.name, size: c.size, qty: c.qty, price: c.p.price })),
+    delivery: draft.delivery, address: draft.address, total: subtotal() + fee, status: "paid", at: Date.now()
+  };
+  lines.forEach(c => { c.p.stock = Math.max(0, c.p.stock - c.qty); });
+  S.orders.unshift(order); S.cart = []; save();
+  const msg = `Hi! I just paid for order ${order.id} ✅\n\n` + order.items.map(i => `• ${i.name} (size ${i.size}) x${i.qty}`).join("\n") +
+    `\n\nTotal paid: ${naira(order.total)}\n${DELIVERY[order.delivery].label}${order.address ? ": " + order.address : ""}\nName: ${order.name}`;
+  sheet(head("") + `<div class="success"><div class="tick">✓</div><h2>Payment received</h2><p class="note" style="margin:0">Your order number</p><div class="code">${order.id}</div>
+    <p style="margin:0">Tap below to open WhatsApp. Your order message is already written, so just press send.</p>
+    <a class="btn wa block" href="${waLink(S.settings.whatsapp, msg)}" target="_blank" rel="noopener">Chat with ${esc(S.settings.shopName)} on WhatsApp</a>
+    <div class="msg" id="waMsg">${esc(msg)}</div>
+    <button class="btn ghost small" type="button" id="copyMsg">Copy message</button>
+    <p class="note">WhatsApp: +${esc(S.settings.whatsapp)}</p></div>`);
+  renderAll();
+}
+
+function openRequest() {
+  sheet(head("Request an item") + `<form id="reqForm">
+    <div class="field"><label for="r-what">What are you looking for?</label><textarea id="r-what" required placeholder="e.g. Green sequin mini dress, long sleeves"></textarea></div>
+    <div class="field"><label for="r-photo">Photo or screenshot (optional)</label><input id="r-photo" type="file" accept="image/*"></div>
+    <div class="row2"><div class="field"><label for="r-size">Size</label><input id="r-size" placeholder="M / 12 / 40"></div><div class="field"><label for="r-budget">Budget (₦)</label><input id="r-budget" inputmode="numeric" placeholder="25000"></div></div>
+    <div class="row2"><div class="field"><label for="r-name">Your name</label><input id="r-name" required></div><div class="field"><label for="r-phone">WhatsApp number</label><input id="r-phone" required inputmode="tel"></div></div>
+    <button class="btn block" type="submit">Send request</button></form>`);
+}
+
+/* ---------- Owner ---------- */
+function renderOwner() {
+  const toPack = S.orders.filter(o => o.status === "paid").length;
+  const week = S.orders.filter(o => Date.now() - o.at < 7 * 864e5).reduce((a, o) => a + o.total, 0);
+  const openReq = S.requests.filter(r => r.status === "open").length;
+  $("#stats").innerHTML = `<div class="stat"><b>${toPack}</b><small>Paid, to pack</small></div><div class="stat"><b class="money">${naira(week)}</b><small>Sales this week</small></div><div class="stat"><b>${openReq}</b><small>Item requests</small></div>`;
+  const tabs = [["orders", "Orders", toPack], ["requests", "Requests", openReq], ["products", "My items", S.products.length], ["settings", "Settings", 0]];
+  $("#tabs").innerHTML = tabs.map(([k, l, n]) => `<button type="button" data-tab="${k}" aria-pressed="${view.tab === k}">${l}${n ? `<span class="n">${n}</span>` : ""}</button>`).join("");
+  $("#panel").innerHTML = { orders: ordersPanel, requests: requestsPanel, products: productsPanel, settings: settingsPanel }[view.tab]();
+}
+const ago = t => { const h = Math.round((Date.now() - t) / 36e5); return h < 1 ? "just now" : h < 24 ? h + "h ago" : Math.round(h / 24) + "d ago"; };
+const NEXT = { paid: ["packed", "Mark packed"], packed: ["sent", "Mark sent"] };
+
+function ordersPanel() {
+  if (!S.orders.length) return `<p class="empty">No orders yet. Share your shop link on your status to get the first one.</p>`;
+  return S.orders.map(o => {
+    const firstName = o.name.split(" ")[0];
+    const update = o.status === "paid" ? `Hi ${firstName}, thanks for order ${o.id}! I'm packing it now.` : o.status === "packed" ? `Hi ${firstName}, your order ${o.id} is packed and going out today.` : `Hi ${firstName}, order ${o.id} has been sent. Enjoy!`;
+    return `<div class="item"><div class="item-top"><div><h3>${esc(o.name)} · ${o.id}</h3><p>${ago(o.at)} · ${DELIVERY[o.delivery].label}</p></div><span class="pill ${o.status}">${o.status}</span></div>
+      <p style="color:var(--ink)">${o.items.map(i => `${esc(i.name)} <b>(${esc(i.size)})</b> ×${i.qty}`).join("<br>")}</p>
+      ${o.address ? `<p>${esc(o.address)}</p>` : ""}
+      <div class="item-top"><b class="money">${naira(o.total)} paid</b><div class="actions">
+        ${NEXT[o.status] ? `<button class="btn small" type="button" data-next="${o.id}">${NEXT[o.status][1]}</button>` : ""}
+        <a class="btn wa small" href="${waLink(o.phone, update)}" target="_blank" rel="noopener">Message ${esc(firstName)}</a></div></div></div>`;
+  }).join("");
+}
+
+function requestsPanel() {
+  if (!S.requests.length) return `<p class="empty">No requests yet.</p>`;
+  return S.requests.map(r => `<div class="item"><div class="item-top"><div><h3>${esc(r.what)}</h3><p>${esc(r.name)} · size ${esc(r.size || "any")} · budget ${r.budget ? naira(r.budget) : "not set"} · ${ago(r.at)}</p></div><span class="pill ${r.status}">${{ open: "open", found: "found", nope: "can't get" }[r.status]}</span></div>
+    ${r.img ? `<img src="${r.img}" alt="Customer photo" style="max-height:160px;border-radius:10px;width:auto">` : ""}
+    <div class="actions">${r.status === "open" ? `<button class="btn small" type="button" data-found="${r.id}">Found it</button><button class="btn ghost small" type="button" data-nope="${r.id}">Can't get it</button>` : ""}
+    <a class="btn wa small" href="${waLink(r.phone, r.status === "nope" ? `Hi ${r.name}, I couldn't find "${r.what}" this time. I'll let you know if it comes in.` : `Hi ${r.name}! Good news, I found "${r.what}". It's on my shop now.`)}" target="_blank" rel="noopener">Message ${esc(r.name)}</a></div></div>`).join("");
+}
+
+function productsPanel() {
+  return S.products.map(p => `<div class="item"><div class="prod-row"><div class="thumb">${art(p)}</div><div class="meta"><b>${esc(p.name)}</b><small class="money">${naira(p.price)} · ${esc(p.cat)} · ${esc(p.sizes.join(", "))}</small></div>
+    <div class="stock" aria-label="Stock"><button type="button" data-sdec="${p.id}" aria-label="Less stock">−</button><span>${p.stock}</span><button type="button" data-sinc="${p.id}" aria-label="More stock">+</button></div></div>
+    <div class="actions"><button class="btn ghost small" type="button" data-edit="${p.id}">Edit</button><button class="btn ghost small" type="button" data-del="${p.id}">Remove</button></div></div>`).join("");
+}
+
+function settingsPanel() {
+  return `<form class="item" id="setForm">
+    <div class="field"><label for="s-name">Shop name</label><input id="s-name" value="${esc(S.settings.shopName)}"></div>
+    <div class="field"><label for="s-wa">Your WhatsApp number (country code, no +)</label><input id="s-wa" inputmode="tel" value="${esc(S.settings.whatsapp)}"></div>
+    <div class="row2"><div class="field"><label for="s-bank">Bank</label><input id="s-bank" value="${esc(S.settings.bank)}"></div><div class="field"><label for="s-acct">Account number</label><input id="s-acct" inputmode="numeric" value="${esc(S.settings.acct)}"></div></div>
+    <button class="btn" type="submit">Save settings</button></form>`;
+}
+
+let photo = null;
+function openProduct(id) {
+  const p = S.products.find(x => x.id === id) || { name: "", price: "", cat: "Dresses", sizes: ["S", "M", "L"], stock: 1 };
+  photo = p.img || null;
+  sheet(head(id ? "Edit item" : "Add an item") + `<form id="prodForm" data-id="${id || ""}">
+    <div class="field"><label for="p-photo">Photo</label><div class="photo-drop"><input id="p-photo" type="file" accept="image/*"><div id="prev">${photo ? `<img src="${photo}" alt="">` : "Snap it the way you'd post it on status"}</div></div></div>
+    <div class="field"><label for="p-name">Item name</label><input id="p-name" required value="${esc(p.name)}" placeholder="e.g. Lace bodycon dress"></div>
+    <div class="row2"><div class="field"><label for="p-price">Price (₦)</label><input id="p-price" required inputmode="numeric" value="${esc(p.price)}"></div>
+    <div class="field"><label for="p-cat">Category</label><select id="p-cat">${CATS.slice(1).map(c => `<option ${p.cat === c ? "selected" : ""}>${c}</option>`).join("")}</select></div></div>
+    <div class="row2"><div class="field"><label for="p-sizes">Sizes (comma separated)</label><input id="p-sizes" value="${esc(p.sizes.join(", "))}"></div>
+    <div class="field"><label for="p-stock">How many do you have?</label><input id="p-stock" inputmode="numeric" value="${p.stock}"></div></div>
+    <button class="btn block" type="submit">${id ? "Save changes" : "Put it in the shop"}</button></form>`);
+}
+
+function readImage(file, cb) {
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    const img = new Image();
+    img.onload = () => { // shrink so the demo can keep it on this device
+      const c = document.createElement("canvas"), k = Math.min(1, 600 / Math.max(img.width, img.height));
+      c.width = img.width * k; c.height = img.height * k; c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      cb(c.toDataURL("image/jpeg", .8));
+    };
+    img.src = r.result;
+  };
+  r.readAsDataURL(file);
+}
+
+/* ---------- Wiring ---------- */
+function renderAll() { renderHeader(); view.mode === "shop" ? renderShop() : renderOwner(); }
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("button, [data-close]"); if (!t) return;
+  const d = t.dataset;
+  if (d.close !== undefined) return closeSheet();
+  if (t.id === "m-shop" || t.id === "m-owner") { view.mode = t.id === "m-shop" ? "shop" : "owner"; location.hash = view.mode; return renderAll(); }
+  if (t.id === "cartBtn") return openCart();
+  if (t.id === "reqBtn") return openRequest();
+  if (t.id === "addProd") return openProduct();
+  if (t.id === "reset") { S = SEED(); save(); closeSheet(); toast("Demo reset"); return renderAll(); }
+  if (d.cat) { view.cat = d.cat; return renderShop(); }
+  if (d.size) { view.picked[d.p] = d.size; return renderShop(); }
+  if (d.add) { const p = S.products.find(x => x.id === d.add); return p.stock === 0 ? openRequest() : addToCart(d.add); }
+  if (d.inc || d.dec) {
+    const lines = cartLines(), c = lines[+(d.inc || d.dec)], line = S.cart.find(x => x.id === c.id && x.size === c.size);
+    if (d.inc) { const inCart = S.cart.filter(x => x.id === c.id).reduce((a, x) => a + x.qty, 0); if (inCart >= c.p.stock) { toast(`Only ${c.p.stock} in stock`); return; } line.qty++; }
+    else if (--line.qty <= 0) S.cart.splice(S.cart.indexOf(line), 1);
+    save(); renderHeader(); return openCart();
+  }
+  if (t.id === "toDetails") return openDetails();
+  if (t.id === "payNow") return placeOrder();
+  if (t.id === "copyMsg") { const txt = $("#waMsg").textContent; navigator.clipboard?.writeText(txt).then(() => toast("Copied"), () => { getSelection().selectAllChildren($("#waMsg")); toast("Selected, press copy"); }); return; }
+  if (d.tab) { view.tab = d.tab; return renderOwner(); }
+  if (d.next) { const o = S.orders.find(x => x.id === d.next); o.status = NEXT[o.status][0]; save(); toast(`${o.id} marked ${o.status}`); return renderOwner(); }
+  if (d.found || d.nope) { const r = S.requests.find(x => x.id === (d.found || d.nope)); r.status = d.found ? "found" : "nope"; save(); if (d.found) { toast("Add it to the shop, then message her"); renderOwner(); return openProduct(); } return renderOwner(); }
+  if (d.sinc || d.sdec) { const p = S.products.find(x => x.id === (d.sinc || d.sdec)); p.stock = Math.max(0, p.stock + (d.sinc ? 1 : -1)); save(); return renderOwner(); }
+  if (d.edit) return openProduct(d.edit);
+  if (d.del) {
+    if (t.dataset.confirm) { S.products = S.products.filter(x => x.id !== d.del); save(); toast("Removed"); return renderOwner(); }
+    t.dataset.confirm = "1"; t.textContent = "Tap again to remove"; return;
+  }
+});
+
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.name === "dl") { draft.delivery = t.value; captureDetails(); return openDetails(); }
+  if (t.name === "pm") { draft.pay = t.value; return openPay(); }
+  if (t.id === "p-photo") readImage(t.files[0], url => { photo = url; $("#prev").innerHTML = `<img src="${url}" alt="">`; });
+  if (t.id === "r-photo") readImage(t.files[0], url => { t.dataset.img = url; });
+});
+document.addEventListener("input", e => { if (e.target.id === "q") { view.q = e.target.value; renderShop(); } });
+
+function captureDetails() {
+  draft.name = $("#d-name")?.value ?? draft.name; draft.phone = $("#d-phone")?.value ?? draft.phone; draft.address = $("#d-addr")?.value ?? draft.address;
+}
+
+document.addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.id === "detailsForm") {
+    captureDetails();
+    if (draft.delivery !== "pickup" && !draft.address.trim()) { toast("Add a delivery address so I know where to send it"); return; }
+    return openPay();
+  }
+  if (f.id === "reqForm") {
+    S.requests.unshift({ id: "r" + Date.now(), name: $("#r-name").value, phone: intlPhone($("#r-phone").value), what: $("#r-what").value, size: $("#r-size").value, budget: +$("#r-budget").value.replace(/\D/g, "") || 0, img: $("#r-photo").dataset.img || null, status: "open", at: Date.now() });
+    save(); closeSheet(); toast("Request sent. I'll message you on WhatsApp."); return renderAll();
+  }
+  if (f.id === "prodForm") {
+    const id = f.dataset.id;
+    const data = { name: $("#p-name").value.trim(), price: +$("#p-price").value.replace(/\D/g, ""), cat: $("#p-cat").value, sizes: $("#p-sizes").value.split(",").map(s => s.trim()).filter(Boolean), stock: +$("#p-stock").value || 0, img: photo };
+    if (!data.sizes.length) data.sizes = ["One size"];
+    if (id) Object.assign(S.products.find(x => x.id === id), data);
+    else S.products.unshift({ id: "p" + Date.now(), color: "#fbe7ef", tone: "#c2185b", ...data });
+    save(); closeSheet(); toast(id ? "Saved" : "It's live in the shop"); view.tab = "products"; return renderAll();
+  }
+  if (f.id === "setForm") {
+    Object.assign(S.settings, { shopName: $("#s-name").value.trim() || "The Closet", whatsapp: $("#s-wa").value.replace(/\D/g, ""), bank: $("#s-bank").value, acct: $("#s-acct").value });
+    save(); toast("Settings saved"); return renderAll();
+  }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+
+if (location.hash === "#owner") view.mode = "owner";
+window.addEventListener("hashchange", () => { view.mode = location.hash === "#owner" ? "owner" : "shop"; renderAll(); });
+renderAll();
+</script>
